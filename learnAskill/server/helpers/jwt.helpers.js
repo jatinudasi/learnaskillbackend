@@ -20,7 +20,7 @@ module.exports = {
     });
   },
   verifyaccesstoken: async (req, res, next) => {
-    console.log(req);
+    console.log(req.body);
     // console.log("imaage = ", req.body);
     if (!req.headers["authorization"])
       return next(new Error("jwt token not present"));
