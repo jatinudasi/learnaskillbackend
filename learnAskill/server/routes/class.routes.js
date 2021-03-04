@@ -25,29 +25,37 @@ app.post("/apply/:classid", verifyaccesstoken, role.checkRole(role.ROLES.Applica
 		// const find = await ClassApplication.find($and[({ classid: req.params.classid }, { applicantid: req.payload.id })]);
         // const find = await ClassApplication.find(query);
 
-        // const find = await ClassApplication.findOne({classid:req.params.classid,applicantid:req.payload.id});
+         const find = await ClassApplication.findOne({classid:req.params.classid,applicantid:req.payload.id});
         // console.log("find---",find)   
         // if (!find) {
 		// 	console.log("inside if");
 
-		let query = {
-			$and: [{ classid: req.params.id }, { applicantid: req.payload.id }],
-		};
+		// let query = {
+		// 	$and:[{ classid: req.params.id }, { applicantid: req.payload.id }],
+		// };
 
-		const find = await ClassApplication.findOne(query);
+		// const find = await ClassApplication.findOne(query);
 		if (!find) {
+			console.log("inside if");
+			console.log(find);
 			const newapplication = new ClassApplication({
 				classid: req.params.classid,
 				applicantid: req.payload.id,
 				recruiterid: clas.classowner
 			});
 				await newapplication.save();
-			res.status(201).send({ status: newapplication.status });
+			res.status(201).send({message:"inside if application created", subscribed: newapplication.status });
 		} else {
+
+
 			console.log("inside else");
-			// const cancellapplication = await ClassApplication.findOneAndDelete({$and:[({ classid: req.params.classid }, { applicantid: req.payload.id })]});
-			const cancellapplication = await ClassApplication.findOneAndDelete(query);
-			res.status(201).send({ status: "Apply" });
+			console.log(find);
+			 let query = {
+					$and:[{ classid: req.params.id }, { applicantid: req.payload.id }],
+				};
+			 const cancellapplication = await ClassApplication.findOneAndDelete({ classid: req.params.classid , applicantid: req.payload.id });
+			//  const cancellapplication = await ClassApplication.findOneAndDelete(query);
+			res.status(201).send({message:"inside else application destroyed", status: "Apply" });
 		}
 	} catch (error) {
 		next(error);
