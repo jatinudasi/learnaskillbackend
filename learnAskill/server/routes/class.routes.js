@@ -8,7 +8,7 @@ const ClassApplication = require("./../models/classapplication.model");
 const role = require("./../helpers/role");
 //all the classes
 
-app.get("/all", verifyaccesstoken, async (req, res, next) => {
+app.get("/all", async (req, res, next) => {
   try {
     const allclasses = await Class.find();
     res.status(200).send({ classes: allclasses });
@@ -78,9 +78,11 @@ app.post(
 );
 
 //get all programming class
-app.get("/category/:name", verifyaccesstoken, async (req, res, next) => {
+app.get("/category/:name", async (req, res, next) => {
   try {
+    console.log(req.params.name);
     const getbyactivity = await Class.find({ activites: req.params.name });
+    console.log(getbyactivity);
     res.status(200).send({ getbyactivity });
   } catch (error) {
     next(error);
@@ -89,6 +91,7 @@ app.get("/category/:name", verifyaccesstoken, async (req, res, next) => {
 //getting a specific class
 app.get("/:id", verifyaccesstoken, async (req, res, next) => {
   try {
+    console.log(req.params.id);
     const specificclass = await Class.findById(req.params.id);
     if (!specificclass) res.status(400).send("enter valid id");
     let query = {
