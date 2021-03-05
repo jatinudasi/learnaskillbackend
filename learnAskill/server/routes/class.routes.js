@@ -16,6 +16,7 @@ app.get("/all", verifyaccesstoken, async (req, res, next) => {
 		next(error);
 	}
 });
+ //apply route
 app.post("/apply/:classid", verifyaccesstoken, role.checkRole(role.ROLES.Applicant), async (req, res, next) => {
 	try {
 		let clas = await Class.findById(req.params.classid);
@@ -63,9 +64,9 @@ app.post("/apply/:classid", verifyaccesstoken, role.checkRole(role.ROLES.Applica
 });
 
 //get all programming class
-app.get("/category/:name", verifyaccesstoken, async (req, res, next) => {
+app.get("/category/:name",  async (req, res, next) => {
 	try {
-		const getbyactivity = await Class.find({ activites: req.params.name });
+		const getbyactivity = await Class.find({ activities: req.params.name });
 		res.status(200).send({getbyactivity});
 	} catch (error) {
 		next(error);
@@ -104,22 +105,22 @@ app.get("/my", verifyaccesstoken, async (req, res, next) => {
 
 app.post("/", verifyaccesstoken, role.checkRole(role.ROLES.Recruiter), async (req, res, next) => {
 	try {
-		// console.log(req.body);
-		const { classname, category, address, city, fees, duration, vacancy, firstname, lastname } = req.body;
+		console.log(req.body);
+		const { classname, category, address, city, fees, duration, vacancy, firstname, lastname,activities,classtype } = req.body;
 		console.log(req.payload);
 		req.body.classowner = req.payload.id;
 		console.log("---------", req.body);
-		if (!classname || !category || !address || !city || !fees || !duration || !vacancy || !firstname || !lastname) throw new Error("enter all the details");
+		if (!classname || !category || !address || !city || !fees || !duration || !vacancy || !firstname || !lastname||!activities||!classtype) throw new Error("enter all the details");
 
 		// const path = req.file.path
 		// const resulturl = await uploadtocloud(path);
 		// req.body.image = resulturl.url;
 
-		const clas = new Class(req.body);
+		const clas = new Class(req.body)
 		await clas.save();
 		//console.log(req.body)
 		// req.body.image = resulturl.url;
-		res.status(201).send({ clas: clas });
+		res.status(201).send({clas: clas});
 	} catch (error) {
 		next(error);
 	}
@@ -133,13 +134,16 @@ app.post("/", verifyaccesstoken, role.checkRole(role.ROLES.Recruiter), async (re
 //     next(error);
 //   }
 // });
+
+
 //upload image
-app.post("/:classid/image", verifyaccesstoken, role.checkRole(role.ROLES.Recruiter), upload.single("image"), configcloud, async (req, res, next) => {
+
+app.post("/:classid/image", verifyaccesstoken,role.checkRole(role.ROLES.Recruiter), upload.single("image"), configcloud, async (req, res, next) => {
 	try {
 		const clas = await Class.findById(req.params.classid);
-		let clas2 = await Class.find({ _id: req.params.classid });
-		console.log(`----------------------------------------------------------${clas}`);
-		console.log(`----------------------------------------------------------${clas2}`);
+		// let clas2 = await Class.find({ _id: req.params.classid });
+		// console.log(`----------------------------------------------------------${clas}`);
+		// console.log(`----------------------------------------------------------${clas2}`);
 		if (!clas) throw new Error("enter valid class id");
 		if (!req.file) throw new Error("enter image");
 
