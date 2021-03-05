@@ -269,9 +269,10 @@ app.get("/accepted/:applicationid",verifyaccesstoken,role.checkRole(role.ROLES.R
 app.get("/rejected/:applicationid",verifyaccesstoken,role.checkRole(role.ROLES.Recruiter),async(req, res, next)=>{
 
 	try {
+		const findbyid = await ClassApplication.findById(req.params.applicationid);
+		if(!findbyid) throw new Error("enter valid application id")
 	const findid = await ClassApplication.findByIdAndUpdate(req.params.applicationid,{status:"Rejected"});
 		console.log("find id",findid)
-	if(!findid)  throw new Error("enter valid application id");
 	res.status(200).send({id:findid})
 
 	
