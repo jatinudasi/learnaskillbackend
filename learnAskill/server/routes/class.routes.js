@@ -233,4 +233,53 @@ app.delete("/:id", verifyaccesstoken, async (req, res, next) => {
   }
 });
 
+//route to get all the student list who had applied
+
+app.get('/student/list',verifyaccesstoken,role.checkRole(role.ROLES.Recruiter),async (req, res, next)=>{
+
+	try {
+		const query = {
+			$and:[{ recruiterid: req.payload.id},{status:"Applied"}]
+		}
+		const application = await  ClassApplication.find(query);
+
+		res.status(200).send({application:application});
+		
+	} catch (error) {
+		next(error);
+	}
+});
+// to accept student request to join the class
+app.get("/accepted/:applicationid",verifyaccesstoken,role.checkRole(role.ROLES.Recruiter),async(req, res, next)=>{
+
+	try {
+	const findid = await ClassApplication.findByIdAndUpdate(req.params.applicationid,{status:"Confirmed"});
+		console.log("find id",findid)
+	if(!findid)  throw new Error("enter valid application id");
+	res.status(200).send({id:findid})
+
+	
+
+		
+	} catch (error) {
+		next(error);
+	}
+});
+
+app.get("/rejected/:applicationid",verifyaccesstoken,role.checkRole(role.ROLES.Recruiter),async(req, res, next)=>{
+
+	try {
+	const findid = await ClassApplication.findByIdAndUpdate(req.params.applicationid,{status:"Rejected"});
+		console.log("find id",findid)
+	if(!findid)  throw new Error("enter valid application id");
+	res.status(200).send({id:findid})
+
+	
+
+		
+	} catch (error) {
+		next(error);
+	}
+});
+
 module.exports = app;
