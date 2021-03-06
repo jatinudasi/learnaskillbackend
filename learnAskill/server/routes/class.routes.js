@@ -289,7 +289,7 @@ app.get("/rejected/:applicationid", verifyaccesstoken, role.checkRole(role.ROLES
 });
 //filter by city
 
-app.get("/category/:name/*", async (req, res, next) => {
+app.get("/category/filter/:name/*", async (req, res, next) => {
 	try {
 		let type = req.query.classtype;
 		let city = req.query.city;
@@ -309,6 +309,9 @@ app.get("/category/:name/*", async (req, res, next) => {
 		for (let i = 0; i < classtype.length; i++) {
 			classtypearr.push({classtype:classtype[i]});
 		}
+
+		console.log("cities",citiesarr);
+		console.log("classtype",classtypearr)
 		
 
 		// console.log(arr);
