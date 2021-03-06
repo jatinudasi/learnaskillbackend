@@ -142,20 +142,9 @@ app.post(
         firstname,
         lastname,
       } = req.body;
-      console.log(req.payload);
+      console.log("prathmesh", req.payload);
       req.body.classowner = req.payload.id;
-      console.log("---------", req.body);
-      console.log({
-        classname,
-        category,
-        address,
-        city,
-        fees,
-        duration,
-        vacancy,
-        firstname,
-        lastname,
-      });
+
       if (
         !classname ||
         !category ||
