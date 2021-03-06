@@ -11,24 +11,24 @@ const role = require("./../helpers/role");
 app.get("/all", verifyaccesstoken, async (req, res, next) => {
 	try {
 		const allclasses = await Class.find();
-		res.status(200).send({ classes: allclasses }).populate("classowner",["email","mobile"]);;
+		res.status(200).send({ classes: allclasses }).populate("classowner", ["email", "mobile"]);
 	} catch (error) {
 		next(error);
 	}
 });
- //apply route
+//apply route
 app.post("/apply/:classid", verifyaccesstoken, role.checkRole(role.ROLES.Applicant), async (req, res, next) => {
 	try {
 		let clas = await Class.findById(req.params.classid);
 		if (!clas) throw new Error("enter valid class id");
-       
-        // const query ={$and:[{classid:req.params.classid },{ applicantid:req.payload.id}]}
-		// const find = await ClassApplication.find($and[({ classid: req.params.classid }, { applicantid: req.payload.id })]);
-        // const find = await ClassApplication.find(query);
 
-         const find = await ClassApplication.findOne({classid:req.params.classid,applicantid:req.payload.id});
-        // console.log("find---",find)   
-        // if (!find) {
+		// const query ={$and:[{classid:req.params.classid },{ applicantid:req.payload.id}]}
+		// const find = await ClassApplication.find($and[({ classid: req.params.classid }, { applicantid: req.payload.id })]);
+		// const find = await ClassApplication.find(query);
+
+		const find = await ClassApplication.findOne({ classid: req.params.classid, applicantid: req.payload.id });
+		// console.log("find---",find)
+		// if (!find) {
 		// 	console.log("inside if");
 
 		// let query = {
@@ -42,21 +42,19 @@ app.post("/apply/:classid", verifyaccesstoken, role.checkRole(role.ROLES.Applica
 			const newapplication = new ClassApplication({
 				classid: req.params.classid,
 				applicantid: req.payload.id,
-				recruiterid: clas.classowner
+				recruiterid: clas.classowner,
 			});
-				await newapplication.save();
-			res.status(201).send({message:"inside if application created", subscribed: newapplication.status });
+			await newapplication.save();
+			res.status(201).send({ message: "inside if application created", subscribed: newapplication.status });
 		} else {
-
-
 			console.log("inside else");
 			console.log(find);
-			 let query = {
-					$and:[{ classid: req.params.id }, { applicantid: req.payload.id }],
-				};
-			 const cancellapplication = await ClassApplication.findOneAndDelete({ classid: req.params.classid , applicantid: req.payload.id });
+			let query = {
+				$and: [{ classid: req.params.id }, { applicantid: req.payload.id }],
+			};
+			const cancellapplication = await ClassApplication.findOneAndDelete({ classid: req.params.classid, applicantid: req.payload.id });
 			//  const cancellapplication = await ClassApplication.findOneAndDelete(query);
-			res.status(201).send({message:"inside else application destroyed", status: "Apply" });
+			res.status(201).send({ message: "inside else application destroyed", status: "Apply" });
 		}
 	} catch (error) {
 		next(error);
@@ -124,44 +122,40 @@ app.post("/apply/:classid", verifyaccesstoken, role.checkRole(role.ROLES.Applica
 // );
 
 //get all programming class
-app.get("/category/:name",  async (req, res, next) => {
+/* app.get("/category/:name", async (req, res, next) => {
 	try {
-		const getbyactivity = await Class.find({ activities: req.params.name }).populate("classowner",["email","mobile"]);
-		res.status(200).send({getbyactivity});
+		const getbyactivity = await Class.find({ activities: req.params.name }).populate("classowner", ["email", "mobile"]);
+		res.status(200).send({ getbyactivity });
+	} catch (error) {
+		next(error);
+	}
+}); */
+//getting a specific class
+app.get("/:id", verifyaccesstoken, async (req, res, next) => {
+	try {
+		const specificclass = await Class.findById(req.params.id);
+		if (!specificclass) res.status(400).send("enter valid id");
+		let query = {
+			$and: [{ classid: req.params.id }, { applicantid: req.payload.id }],
+		};
+		// let query ={$and:[{price:{$gte:lowervalue}},{price:{$lte:uppervalue}}]}
+
+		const subscribed = await ClassApplication.findOne(query);
+
+		if (!subscribed) res.status(200).send({ class: specificclass, subscribed: "Apply" });
+		else res.status(200).send({ class: specificclass, subscribed: subscribed.status });
 	} catch (error) {
 		next(error);
 	}
 });
-//getting a specific class
-app.get("/:id", verifyaccesstoken, async (req, res, next) => {
-  try {
-    const specificclass = await Class.findById(req.params.id);
-    if (!specificclass) res.status(400).send("enter valid id");
-    let query = {
-      $and: [{ classid: req.params.id }, { applicantid: req.payload.id }],
-    };
-    // let query ={$and:[{price:{$gte:lowervalue}},{price:{$lte:uppervalue}}]}
-
-    const subscribed = await ClassApplication.findOne(query);
-
-    if (!subscribed)
-      res.status(200).send({ class: specificclass, subscribed: "Apply" });
-    else
-      res
-        .status(200)
-        .send({ class: specificclass, subscribed: subscribed.status });
-  } catch (error) {
-    next(error);
-  }
-});
 //getting all the class that the recruiter has made
 app.get("/my", verifyaccesstoken, async (req, res, next) => {
-  try {
-    const myclasses = await Class.find({ classowner: req.payload.id });
-    res.status(200).send({ my: myclasses });
-  } catch (error) {
-    next(error);
-  }
+	try {
+		const myclasses = await Class.find({ classowner: req.payload.id });
+		res.status(200).send({ my: myclasses });
+	} catch (error) {
+		next(error);
+	}
 });
 
 // creating a class
@@ -170,21 +164,21 @@ app.get("/my", verifyaccesstoken, async (req, res, next) => {
 app.post("/", verifyaccesstoken, role.checkRole(role.ROLES.Recruiter), async (req, res, next) => {
 	try {
 		console.log(req.body);
-		const { classname, category, address, city, fees, duration, vacancy, firstname, lastname,activities,classtype } = req.body;
+		const { classname, category, address, city, fees, duration, vacancy, firstname, lastname, activities, classtype } = req.body;
 		console.log(req.payload);
 		req.body.classowner = req.payload.id;
 		console.log("---------", req.body);
-		if (!classname || !category || !address || !city || !fees || !duration || !vacancy || !firstname || !lastname||!activities||!classtype) throw new Error("enter all the details");
+		if (!classname || !category || !address || !city || !fees || !duration || !vacancy || !firstname || !lastname || !activities || !classtype) throw new Error("enter all the details");
 
 		// const path = req.file.path
 		// const resulturl = await uploadtocloud(path);
 		// req.body.image = resulturl.url;
 
-		const clas = new Class(req.body)
+		const clas = new Class(req.body);
 		await clas.save();
 		//console.log(req.body)
 		// req.body.image = resulturl.url;
-		res.status(201).send({clas: clas});
+		res.status(201).send({ clas: clas });
 	} catch (error) {
 		next(error);
 	}
@@ -199,10 +193,9 @@ app.post("/", verifyaccesstoken, role.checkRole(role.ROLES.Recruiter), async (re
 //   }
 // });
 
-
 //upload image
 
-app.post("/:classid/image", verifyaccesstoken,role.checkRole(role.ROLES.Recruiter), upload.single("image"), configcloud, async (req, res, next) => {
+app.post("/:classid/image", verifyaccesstoken, role.checkRole(role.ROLES.Recruiter), upload.single("image"), configcloud, async (req, res, next) => {
 	try {
 		const clas = await Class.findById(req.params.classid);
 		// let clas2 = await Class.find({ _id: req.params.classid });
@@ -225,59 +218,75 @@ app.post("/:classid/image", verifyaccesstoken,role.checkRole(role.ROLES.Recruite
 
 //deleting a class by id
 app.delete("/:id", verifyaccesstoken, async (req, res, next) => {
-  try {
-    const del = await Class.findByIdAndDelete(req.params.id);
-    res.send(del);
-  } catch (error) {
-    next(error);
-  }
+	try {
+		const del = await Class.findByIdAndDelete(req.params.id);
+		res.send(del);
+	} catch (error) {
+		next(error);
+	}
 });
 
 //route to get all the student list who had applied
 
-app.get('/student/list',verifyaccesstoken,role.checkRole(role.ROLES.Recruiter),async (req, res, next)=>{
-
+app.get("/student/list", verifyaccesstoken, role.checkRole(role.ROLES.Recruiter), async (req, res, next) => {
 	try {
 		const query = {
-			$and:[{ recruiterid: req.payload.id},{status:"Applied"}]
-		}
-		const application = await  ClassApplication.find(query);
+			$and: [{ recruiterid: req.payload.id }, { status: "Applied" }],
+		};
+		const application = await ClassApplication.find(query);
 
-		res.status(200).send({application:application});
-		
+		res.status(200).send({ application: application });
 	} catch (error) {
 		next(error);
 	}
 });
 // to accept student request to join the class
-app.get("/accepted/:applicationid",verifyaccesstoken,role.checkRole(role.ROLES.Recruiter),async(req, res, next)=>{
-
+app.get("/accepted/:applicationid", verifyaccesstoken, role.checkRole(role.ROLES.Recruiter), async (req, res, next) => {
 	try {
-	const findid = await ClassApplication.findByIdAndUpdate(req.params.applicationid,{status:"Confirmed"});
-		console.log("find id",findid)
-	if(!findid)  throw new Error("enter valid application id");
-	res.status(200).send({id:findid})
-
-	
-
-		
+		const findid = await ClassApplication.findByIdAndUpdate(req.params.applicationid, { status: "Confirmed" });
+		console.log("find id", findid);
+		if (!findid) throw new Error("enter valid application id");
+		res.status(200).send({ id: findid });
 	} catch (error) {
 		next(error);
 	}
 });
 
-app.get("/rejected/:applicationid",verifyaccesstoken,role.checkRole(role.ROLES.Recruiter),async(req, res, next)=>{
-
+app.get("/rejected/:applicationid", verifyaccesstoken, role.checkRole(role.ROLES.Recruiter), async (req, res, next) => {
 	try {
 		const findbyid = await ClassApplication.findById(req.params.applicationid);
-		if(!findbyid) throw new Error("enter valid application id")
-	const findid = await ClassApplication.findByIdAndUpdate(req.params.applicationid,{status:"Rejected"});
-		console.log("find id",findid)
-	res.status(200).send({id:findid})
+		if (!findbyid) throw new Error("enter valid application id");
+		const findid = await ClassApplication.findByIdAndUpdate(req.params.applicationid, { status: "Rejected" });
+		console.log("find id", findid);
+		res.status(200).send({ id: findid });
+	} catch (error) {
+		next(error);
+	}
+});
 
-	
+app.get("/category/:name/*", async (req, res, next) => {
+	try {
+		let type = req.query.classtype;
+		let city = req.query.city;
 
-		
+		classtype = type.split(",");
+		cities = city.split(",");
+		console.log(classtype);
+		console.log(cities);
+
+		let arr = [];
+
+		for (let i = 0; i < classtype.length; i++) {
+			arr.push({ classtype: classtype[i], activities: req.params.name, city: city[i] });
+		}
+
+		console.log(arr);
+
+		let query = {$or: [...arr]}
+
+		const filter = await Class.find(query);
+
+		res.status(200).send({ classtype: filter });
 	} catch (error) {
 		next(error);
 	}

@@ -10,7 +10,7 @@ module.exports = {
         role: role,
       };
       const secret = process.env.jwtkey;
-      const optains = { expiresIn: "1h" };
+      const optains = { expiresIn: "24h" };
       jwt.sign(payload, secret, optains, (err, token) => {
         if (token) {
           return resolve(token);
