@@ -287,6 +287,7 @@ app.get("/rejected/:applicationid", verifyaccesstoken, role.checkRole(role.ROLES
 		next(error);
 	}
 });
+//filter by city
 
 app.get("/category/:name/*", async (req, res, next) => {
 	try {
@@ -298,16 +299,24 @@ app.get("/category/:name/*", async (req, res, next) => {
 		console.log(classtype);
 		console.log(cities);
 
-		let arr = [];
+		let citiesarr = [];
+		let classtypearr =[];
 
-		for (let i = 0; i < classtype.length; i++) {
-			arr.push({ classtype: classtype[i], activities: req.params.name, city: city[i] });
+		for (let i = 0; i < cities.length; i++) {
+			citiesarr.push({city:cities[i]});
 		}
 
-		console.log(arr);
+		for (let i = 0; i < classtype.length; i++) {
+			classtypearr.push({classtype:classtype[i]});
+		}
+		
 
-		let query = {$or: [...arr]}
+		// console.log(arr);
 
+		// let query = {$or: [...arr]}
+
+		// let query ={$and:[{ activities:req.params.name},{$or:[{city:"Hydrabad"},{city:"Pune"}]},{$or:[{classtype:"Parttime"},{classtype:"Fullttime"}]}]}
+		let query ={$and:[{ activities:req.params.name},{$or:[...citiesarr]},{$or:[...classtypearr]}]}
 		const filter = await Class.find(query);
 
 		res.status(200).send({ classtype: filter });
