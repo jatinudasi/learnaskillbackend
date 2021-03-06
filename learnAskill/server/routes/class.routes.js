@@ -122,7 +122,7 @@ app.post("/apply/:classid", verifyaccesstoken, role.checkRole(role.ROLES.Applica
 // );
 
 //get all programming class
-/* app.get("/category/:name", async (req, res, next) => {
+ app.get("/category/:name", async (req, res, next) => {
 	try {
 		const getbyactivity = await Class.find({ activities: req.params.name }).populate("classowner", ["email", "mobile"]);
 		res.status(200).send({ getbyactivity });
