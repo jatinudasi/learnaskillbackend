@@ -231,9 +231,9 @@ app.delete("/:id", verifyaccesstoken, async (req, res, next) => {
 app.get("/student/list", verifyaccesstoken, role.checkRole(role.ROLES.Recruiter), async (req, res, next) => {
 	try {
 		const query = {
-			$and: [{ recruiterid: req.payload.id }, { status: "Applied" }],
-		};
-		const application = await ClassApplication.find(query);
+			$and:[{ recruiterid: req.payload.id},{status:"Applied"}]
+		}
+		const application = await  ClassApplication.find(query).populate('applicantid').populate('classid');
 
 		res.status(200).send({ application: application });
 	} catch (error) {
