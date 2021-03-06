@@ -10,8 +10,8 @@ const role = require("./../helpers/role");
 
 app.get("/all", verifyaccesstoken, async (req, res, next) => {
 	try {
-		const allclasses = await Class.find();
-		res.status(200).send({ classes: allclasses }).populate("classowner",["email","mobile"]);;
+		const allclasses = await Class.find().populate("classowner",["email","mobile"]);
+		res.status(200).send({ classes: allclasses })
 	} catch (error) {
 		next(error);
 	}
