@@ -129,11 +129,11 @@ app.post("/apply/:classid", verifyaccesstoken, role.checkRole(role.ROLES.Applica
 	} catch (error) {
 		next(error);
 	}
-}); */
+}); 
 //getting a specific class
 app.get("/:id", verifyaccesstoken, async (req, res, next) => {
 	try {
-		const specificclass = await Class.findById(req.params.id);
+		const specificclass = await Class.findById(req.params.id).populate("classowner", ["email", "mobile"]);;
 		if (!specificclass) res.status(400).send("enter valid id");
 		let query = {
 			$and: [{ classid: req.params.id }, { applicantid: req.payload.id }],
