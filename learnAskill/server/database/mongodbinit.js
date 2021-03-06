@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 require("dotenv").config();
 
-const CONNECTION_URL = process.env.MONGODB_URI;
+const CONNECTION_URL = process.env.MONGODB_URI_Saket;
 
 mongoose.connect(CONNECTION_URL, {
 	useNewUrlParser: true,

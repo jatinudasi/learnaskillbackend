@@ -240,6 +240,30 @@ app.get("/student/list", verifyaccesstoken, role.checkRole(role.ROLES.Recruiter)
 		next(error);
 	}
 });
+app.get("/student/list/accepted", verifyaccesstoken, role.checkRole(role.ROLES.Recruiter), async (req, res, next) => {
+	try {
+		const query = {
+			$and:[{ recruiterid: req.payload.id},{status:"Confirmed"}]
+		}
+		const application = await  ClassApplication.find(query).populate('applicantid').populate('classid');
+
+		res.status(200).send({ application: application });
+	} catch (error) {
+		next(error);
+	}
+});
+app.get("/student/list/rejected", verifyaccesstoken, role.checkRole(role.ROLES.Recruiter), async (req, res, next) => {
+	try {
+		const query = {
+			$and:[{ recruiterid: req.payload.id},{status:"Rejected"}]
+		}
+		const application = await  ClassApplication.find(query).populate('applicantid').populate('classid');
+
+		res.status(200).send({ application: application });
+	} catch (error) {
+		next(error);
+	}
+});
 // to accept student request to join the class
 app.get("/accepted/:applicationid", verifyaccesstoken, role.checkRole(role.ROLES.Recruiter), async (req, res, next) => {
 	try {
