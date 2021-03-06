@@ -241,7 +241,7 @@ app.get('/student/list',verifyaccesstoken,role.checkRole(role.ROLES.Recruiter),a
 		const query = {
 			$and:[{ recruiterid: req.payload.id},{status:"Applied"}]
 		}
-		const application = await  ClassApplication.find(query);
+		const application = await  ClassApplication.find(query).populate('applicantid').populate('classid');
 
 		res.status(200).send({application:application});
 		
