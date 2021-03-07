@@ -320,7 +320,7 @@ app.get("/category/filter/:name/*", async (req, res, next) => {
 		// let query = {$or: [...arr]}
 
 		// let query ={$and:[{ activities:req.params.name},{$or:[{city:"Hydrabad"},{city:"Pune"}]},{$or:[{classtype:"Parttime"},{classtype:"Fullttime"}]}]}
-		let query ={$and:[{ activities:req.params.name},{$or:[...citiesarr]},{$or:[...classtypearr]}]}
+		let query ={$and:[{ activities:req.params.name},{$or:[...req.query.citiesarr]},{$or:[...req.query.classtypearr]}]}
 		const filter = await Class.find(query);
 
 		res.status(200).send({ classtype: filter });

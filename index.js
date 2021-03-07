@@ -17,7 +17,7 @@ const allroutes = require("./routes/index");
 app.use(allroutes);
 
 app.get("/", (req, res, next) => {
-  res.send("hello world");
+  res.status(200).send("hello world");
 });
 
 /** catch 404 and forward to error handler */
