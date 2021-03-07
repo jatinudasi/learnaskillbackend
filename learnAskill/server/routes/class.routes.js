@@ -291,27 +291,28 @@ app.get("/rejected/:applicationid", verifyaccesstoken, role.checkRole(role.ROLES
 
 app.get("/category/filter/:name/*", async (req, res, next) => {
 	try {
-		let type = req.query.classtype;
-		let city = req.query.city;
+		// let type = req.query.classtype;
+		// let city = req.query.city;
 
-		classtype = type.split(",");
-		cities = city.split(",");
-		console.log(classtype);
-		console.log(cities);
+		// classtype = type.split(",");
+		// cities = city.split(",");
 
-		let citiesarr = [];
-		let classtypearr =[];
+		// console.log(classtype);
+		// console.log(cities);
 
-		for (let i = 0; i < cities.length; i++) {
-			citiesarr.push({city:cities[i]});
-		}
+		// let citiesarr = [];
+		// let classtypearr =[];
 
-		for (let i = 0; i < classtype.length; i++) {
-			classtypearr.push({classtype:classtype[i]});
-		}
+		// for (let i = 0; i < cities.length; i++) {
+		// 	citiesarr.push({city:cities[i]});
+		// }
 
-		console.log("cities",citiesarr);
-		console.log("classtype",classtypearr)
+		// for (let i = 0; i < classtype.length; i++) {
+		// 	classtypearr.push({classtype:classtype[i]});
+		// }
+
+		console.log("cities",req.query.citiesarr);
+		console.log("classtype",req.query.classtypearr)
 		
 
 		// console.log(arr);
