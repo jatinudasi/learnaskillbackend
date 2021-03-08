@@ -1,5 +1,5 @@
 const cloudinary = require("cloudinary").v2;
-require("dotenv").config();
+// require("dotenv").config();
 
 const configcloud = (req, res, next) => {
   cloudinary.config({
