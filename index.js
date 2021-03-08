@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const logger = require("morgan");
-require("dotenv").config();
+// require("dotenv").config();
 const bodyParser = require("body-parser");
 require("./database/mongodbinit");
 const app = express();
