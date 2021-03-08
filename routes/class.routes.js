@@ -184,16 +184,6 @@ app.post("/", verifyaccesstoken, role.checkRole(role.ROLES.Recruiter), async (re
 	}
 });
 
-// app.post("/prat/uppload", upload.single("image"), async (req, res, next) => {
-//   try {
-//     console.log(req.file);
-//     res.send("done");
-//   } catch (error) {
-//     next(error);
-//   }
-// });
-
-//upload image
 
 app.post("/:classid/image", verifyaccesstoken, role.checkRole(role.ROLES.Recruiter), upload.single("image"), configcloud, async (req, res, next) => {
 	try {
