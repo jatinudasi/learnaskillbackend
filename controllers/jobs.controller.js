@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Job = require("../models/job.model");
+const Application = require("../models/application.model");
 
 exports.post = async (req, res, next) => {
 	try {
@@ -87,4 +88,48 @@ exports.deleteOne = async (req, res, next) => {
 	}
 };
 
+exports.byActivaty = async (req, res, next) => {
+	try {
+		const getbyActivity = await Job.find({ activities: req.params.name }).populate("recruiter", ["email", "mobile"]);
+		res.status(200).send({ getbyactivity });
+	} catch (error) {
+		next(error);
+	}
+};
 
+exports.list = async (req, res, next) => {
+	try {
+		const query = {
+			$and: [{ recruiterId: req.payload.id }, { status: "Applied" }],
+		};
+		const application = await Application.find(query).populate("applicantId").populate("jobId");
+
+		res.status(200).send({ application: application, count: application.length });
+	} catch (error) {
+		next(error);
+	}
+};
+exports.accepted = async (req, res, next) => {
+	try {
+		const query = {
+			$and: [{ recruiterId: req.payload.id }, { status: "Confirmed" }],
+		};
+		const application = await Application.find(query).populate("applicantId").populate("jobId");
+
+		res.status(200).send({ application: application, count: application.length });
+	} catch (error) {
+		next(error);
+	}
+};
+exports.rejected = async (req, res, next) => {
+	try {
+		const query = {
+			$and: [{ recruiterId: req.payload.id }, { status: "Rejected" }],
+		};
+		const application = await Application.find(query).populate("applicantId").populate("jobId");
+
+		res.status(200).send({ application: application, count: application.length });
+	} catch (error) {
+		next(error);
+	}
+};

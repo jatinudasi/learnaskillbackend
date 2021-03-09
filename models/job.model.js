@@ -28,9 +28,10 @@ const jobSchema = new Schema(
 			type: String,
 			required: true,
 		},
-		type: {
+		classtype: {
 			type: String,
 			required: true,
+			enum: ["Fulltime", "Parttime", "Remote"],
 		},
 		address: {
 			type: String,
@@ -43,6 +44,11 @@ const jobSchema = new Schema(
 		skills: {
 			type: [String],
 			required: true,
+		},
+		activities: {
+			type: String,
+			required: true,
+			enum: ["Hospital", "Technical", "Sport", "Cenimatics", "Cooking", "Performance", "Programming"],
 		},
 	},
 	{
