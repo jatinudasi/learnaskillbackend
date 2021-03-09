@@ -340,13 +340,33 @@ app.get("/category/filter/:name", async (req, res, next) => {
 
 		if(req.query.citiesarr&&req.query.classtypearr)
 		{
+			const mycity =[];
+		for(let i=0;i<req.query.citiesarr.length;i++){
+			mycity.push({city:req.query.citiesarr[i]});
+		}
+		console.log(mycity);
+		const classtypesjatin =[]; 
+		for(let i=0;i<req.query.classtypearr.length;i++){
+			classtypesjatin.push({classtype:req.query.classtypearr[i]});
+		}
+		console.log(classtypesjatin)
 		console.log("both array given",req.query.citiesarr,req.query.classtypearr)
 		 query ={$and:[{ activities:req.params.name},{$or:[...mycity]},{$or:[...classtypesjatin]}]}
 		} 
 		else if(req.query.citiesarr){
+			const mycity =[];
+		for(let i=0;i<req.query.citiesarr.length;i++){
+			mycity.push({city:req.query.citiesarr[i]});
+		}
+		console.log(mycity);
 			console.log("cities array given",req.query.citiesarr);
 			query ={$and:[{ activities:req.params.name},{$or:[...mycity]}]}
 		}else if(req.query.classtypearr){
+			const classtypesjatin =[]; 
+		for(let i=0;i<req.query.classtypearr.length;i++){
+			classtypesjatin.push({classtype:req.query.classtypearr[i]});
+		}
+		console.log(classtypesjatin)
 			console.log("classtype array given",req.query.classtypearr);
 			query ={$and:[{ activities:req.params.name},{$or:[...classtypesjatin]}]}
 		}
