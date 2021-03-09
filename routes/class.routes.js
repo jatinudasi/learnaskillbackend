@@ -225,7 +225,7 @@ app.get("/student/list", verifyaccesstoken, role.checkRole(role.ROLES.Recruiter)
 		}
 		const application = await  ClassApplication.find(query).populate('applicantid').populate('classid');
 
-		res.status(200).send({ application: application });
+		res.status(200).send({ application: application,count:application.length });
 	} catch (error) {
 		next(error);
 	}
@@ -249,7 +249,7 @@ app.get("/student/list/rejected", verifyaccesstoken, role.checkRole(role.ROLES.R
 		}
 		const application = await  ClassApplication.find(query).populate('applicantid').populate('classid');
 
-		res.status(200).send({ application: application });
+		res.status(200).send({ application: application,count:application.length });
 	} catch (error) {
 		next(error);
 	}
@@ -265,7 +265,7 @@ app.get("/accepted/:applicationid", verifyaccesstoken, role.checkRole(role.ROLES
 		next(error);
 	}
 });
-
+//to reject request of student to join the class
 app.get("/rejected/:applicationid", verifyaccesstoken, role.checkRole(role.ROLES.Recruiter), async (req, res, next) => {
 	try {
 		const findbyid = await ClassApplication.findById(req.params.applicationid);
@@ -399,7 +399,9 @@ next(error);
 app.get('/classdashboard',verifyaccesstoken,role.checkRole(role.ROLES.Recruiter),async(req,res,next)=>{
 	try {
 		const pending = await ClassApplication.find({recruiterid:req.payload.id,status:"Applied"}).count();
-		
+		const accepted = await ClassApplication.find({recruiterid:req.payload.id,status:"Confirmed"}).count();
+		const rejected = await ClassApplication.find({recruiterid:req.paypayload.id,status:"Rejected"}).count();
+		res.status(200).send({pending:pending,accepted:accepted,rejected:rejected});
 	} catch (error) {
 		next(error);
 	}
