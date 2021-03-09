@@ -235,7 +235,7 @@ app.get("/student/list/accepted", verifyaccesstoken, role.checkRole(role.ROLES.R
 		const query = {
 			$and:[{ recruiterid: req.payload.id},{status:"Confirmed"}]
 		}
-		const application = await  ClassApplication.find(query).populate('applicantid').populate('classid');
+		const application = await  ClassApplication.find(query).populate('applicantid').populate('classid').count();
 
 		res.status(200).send({ application: application });
 	} catch (error) {
@@ -395,5 +395,16 @@ try {
 next(error);	
 }
 })
+
+app.get('/classdashboard',verifyaccesstoken,role.checkRole(role.ROLES.Recruiter),async(req,res,next)=>{
+	try {
+		const pending = await ClassApplication.find({recruiterid:req.payload.id,status:"Applied"}).count();
+		
+	} catch (error) {
+		next(error);
+	}
+
+
+});
 
 module.exports = app;
