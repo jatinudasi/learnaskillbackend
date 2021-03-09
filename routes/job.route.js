@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { verifyaccesstoken } = require("./../helpers/jwt.helpers");
 const jobsController = require("../controllers/jobs.controller");
+const role = require("./../helpers/role");
 const applicationController = require("../controllers/application.controller");
 
 router.get("/applied", verifyaccesstoken, applicationController.fetchApplied);

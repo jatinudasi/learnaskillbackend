@@ -18,32 +18,18 @@ const applicationSchema = new Schema(
 			ref: "Recruiter",
 			required: true,
 		},
-		first: {
-			type: String,
-			required: true,
-		},
-		last: {
-			type: String,
-			required: true,
-		},
-		email: {
-			type: String,
-			required: true,
-		},
-		phone: {
-			type: String,
-			required: true,
-		},
-		address: {
-			type: String,
-			required: true,
-		},
+
 		resume: {
 			type: String,
 			required: true,
 		},
 		cover_letter: {
 			type: String,
+		},
+		status: {
+			type: String,
+			enum: ["Applied", "Confirmed", "Rejected"],
+			default: "Applied",
 		},
 	},
 	{

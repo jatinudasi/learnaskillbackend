@@ -9,15 +9,76 @@ exports.apply = async (req, res, next) => {
 		//console.log(req.body);
 		//console.log(req.payload.id);
 		const jobData = await Job.findById(req.params.jobId);
-		req.body.recruiterId = jobData.recruiter;
-		req.body.applicantId = req.payload.id;
-		req.body.jobId = req.params.jobId;
-		const application = new Application(req.body);
-		const ApplyforJob = await application.save();
-		res.status(200).send(ApplyforJob);
+		if (!jobData) throw new Error("enter valid job id");
+
+		const find = await Application.findOne({ jobId: req.params.jobId, applicantId: req.payload.id });
+
+		if (!find) {
+			console.log("inside if");
+			console.log(find);
+			const newApplication = new Application({
+				jobId: req.params.jobId,
+				applicantId: req.payload.id,
+				recruiterId: jobData.recruiter,
+				resume: req.body.resume,	
+			});
+			await newApplication.save();
+			res.status(201).send({ message: "inside if application created", subscribed: newApplication.status });
+		} else {
+			console.log("inside else");
+			console.log(find);
+			let query = {
+				$and: [{ jobId: req.params.jobId }, { applicantId: req.payload.id }],
+			};
+			const cancellapplication = await Application.findOneAndDelete({ jobId: req.params.jobId, applicantId: req.payload.id });
+			//  const cancellapplication = await ClassApplication.findOneAndDelete(query);
+			res.status(201).send({ message: "inside else application destroyed", status: "Apply" });
+		}
 	} catch (err) {
 		next(err);
 	}
+
+	/* let clas = await Class.findById(req.params.classid);
+	if (!clas) throw new Error("enter valid class id");
+
+	// const query ={$and:[{classid:req.params.classid },{ applicantid:req.payload.id}]}
+	// const find = await ClassApplication.find($and[({ classid: req.params.classid }, { applicantid: req.payload.id })]);
+	// const find = await ClassApplication.find(query);
+
+	const find = await ClassApplication.findOne({ classid: req.params.classid, applicantid: req.payload.id });
+	// console.log("find---",find)
+	// if (!find) {
+	// 	console.log("inside if");
+
+	// let query = {
+	// 	$and:[{ classid: req.params.id }, { applicantid: req.payload.id }],
+	// };
+
+	// const find = await ClassApplication.findOne(query);
+	if (!find) {
+		console.log("inside if");
+		console.log(find);
+		const newapplication = new ClassApplication({
+			classid: req.params.classid,
+			applicantid: req.payload.id,
+			recruiterid: clas.classowner,
+		});
+		await newapplication.save();
+		res.status(201).send({ message: "inside if application created", subscribed: newapplication.status });
+	} else {
+		console.log("inside else");
+		console.log(find);
+		let query = {
+			$and: [{ classid: req.params.id }, { applicantid: req.payload.id }],
+		};
+		const cancellapplication = await ClassApplication.findOneAndDelete({ classid: req.params.classid, applicantid: req.payload.id });
+		//  const cancellapplication = await ClassApplication.findOneAndDelete(query);
+		res.status(201).send({ message: "inside else application destroyed", status: "Apply" });
+	}
+} catch (error) {
+	next(error);
+}
+ */
 };
 
 exports.fetchApplied = async (req, res, next) => {
