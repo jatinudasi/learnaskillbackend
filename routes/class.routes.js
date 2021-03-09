@@ -235,9 +235,9 @@ app.get("/student/list/accepted", verifyaccesstoken, role.checkRole(role.ROLES.R
 		const query = {
 			$and:[{ recruiterid: req.payload.id},{status:"Confirmed"}]
 		}
-		const application = await  ClassApplication.find(query).populate('applicantid').populate('classid').count();
+		const application = await  ClassApplication.find(query).populate('applicantid').populate('classid');
 
-		res.status(200).send({ application: application });
+		res.status(200).send({ application: application ,count:application.length});
 	} catch (error) {
 		next(error);
 	}
