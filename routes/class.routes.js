@@ -309,26 +309,55 @@ app.get("/category/filter/:name", async (req, res, next) => {
 		// let query = {$or: [...arr]}
 
 		//  let query ={$and:[{ activities:req.params.name},{$or:[{city:"Mumbai"},{city:"Pune"}]}]}
-		let query ;
+		const mycity =[];
+		for(let i=0;i<req.query.citiesarr.length;i++){
+			mycity.push({city:req.query.citiesarr[i]});
+		}
+		console.log(mycity)
+
+		const classtypesjatin =[]; 
+		for(let i=0;i<req.query.classtypearr.length;i++){
+			classtypesjatin.push({classtype:req.query.classtypearr[i]});
+		}
+		console.log(classtypesjatin)
+		
+		
+		// if(req.query.citiesarr&&req.query.classtypearr)
+		// {
+		// console.log("both array given",req.query.citiesarr,req.query.classtypearr)
+		//  query ={$and:[{ activities:req.params.name},{$or:[...req.query.citiesarr]},{$or:[...req.query.classtypearr]}]}
+		// } 
+		// else if(req.query.citiesarr){
+		// 	console.log("cities array given",req.query.citiesarr);
+		// 	query ={$and:[{ activities:req.params.name},{$or:[...req.query.citiesarr]}]}
+		// }else if(req.query.classtypearr){
+		// 	console.log("classtype array given",req.query.classtypearr);
+		// 	query ={$and:[{ activities:req.params.name},{$or:[...req.query.classtypearr]}]}
+		// }
+		// else{
+		// 	res.status(500).send("enter proper details")
+		// }
+
 		if(req.query.citiesarr&&req.query.classtypearr)
 		{
 		console.log("both array given",req.query.citiesarr,req.query.classtypearr)
-		 query ={$and:[{ activities:req.params.name},{$or:[...req.query.citiesarr]},{$or:[...req.query.classtypearr]}]}
+		 query ={$and:[{ activities:req.params.name},{$or:[...mycity]},{$or:[...classtypesjatin]}]}
 		} 
 		else if(req.query.citiesarr){
 			console.log("cities array given",req.query.citiesarr);
-			query ={$and:[{ activities:req.params.name},{$or:[...req.query.citiesarr]}]}
+			query ={$and:[{ activities:req.params.name},{$or:[...mycity]}]}
 		}else if(req.query.classtypearr){
 			console.log("classtype array given",req.query.classtypearr);
-			query ={$and:[{ activities:req.params.name},{$or:[...req.query.classtypearr]}]}
+			query ={$and:[{ activities:req.params.name},{$or:[...classtypesjatin]}]}
 		}
 		else{
 			res.status(500).send("enter proper details")
 		}
 		 
 		//  query ={$and:[{ activities:req.params.name},{$or:[...citiesarr]},{$or:[...classtypearr]}]}
-
+		console.log("query",query)
 		const filter = await Class.find(query);
+		console.log(filter)
 
 		res.status(200).send({ classtype: filter });
 	} catch (error) {

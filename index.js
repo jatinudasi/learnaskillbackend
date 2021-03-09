@@ -37,7 +37,7 @@ app.use(function (err, req, res, next) {
   }
 });
 
-const PORT = process.env.Port || 8080;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`http://localhost:${PORT}`);
 });

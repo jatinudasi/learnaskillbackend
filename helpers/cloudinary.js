@@ -13,11 +13,12 @@ const configcloud = (req, res, next) => {
 const uploadtocloud = (file) => {
   return new Promise((resolve, reject) => {
     cloudinary.uploader.upload(file, function (error, image) {
+      console.log("file",file)
       console.log(error);
       console.log(image);
       const fs = require("fs");
       fs.unlinkSync(file);
-      console.log(image);
+      console.log("image",image);
       if (error) {
         console.log("there is error ");
         reject(new Error("there is error in cloudinary"));
