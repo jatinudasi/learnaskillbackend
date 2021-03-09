@@ -18,7 +18,7 @@ exports.apply = async (req, res, next) => {
 			console.log(find);
 			const newApplication = new Application({
 				jobId: req.params.jobId,
-				applicantId: req.payload.id,
+				applicantId: req.payload.id,	
 				recruiterId: jobData.recruiter,
 				resume: req.body.resume,	
 			});
