@@ -14,6 +14,9 @@ router.put("/:jobId", verifyaccesstoken, jobsController.putOne);
 router.delete("/:jobId", verifyaccesstoken, jobsController.deleteOne);
 router.post("/:jobId/apply", verifyaccesstoken, applicationController.apply);
 router.post("/:jobId/save", verifyaccesstoken, applicationController.save);
+router.post("/applicant/list", verifyaccesstoken, role.checkRole(role.ROLES.Recruiter), jobsController.list);
+router.post("/applicant/list/accepted", verifyaccesstoken, role.checkRole(role.ROLES.Recruiter), jobsController.accepted);
+router.post("/applicant/list/rejected", verifyaccesstoken, role.checkRole(role.ROLES.Recruiter), jobsController.rejected);
 
 /* router.get('/:jobId/details', verifyaccesstoken, applicationController.getApplicationDetails)
 //router.post('/:jobId/unsave', verifyaccesstoken, applicationController.unsave)
