@@ -413,6 +413,8 @@ app.get('/my/subscribed/classes',verifyaccesstoken,role.checkRole(role.ROLES.App
 
 	const query ={applicantid:req.payload.id};
 
-	const myclasses = await Classapplication.find(query).populate('classid')
+	const myclasses = await Classapplication.find(query).populate('classid');
+
+	res.status(200).send({myclasses: myclasses});
 });
 module.exports = app;
