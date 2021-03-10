@@ -309,17 +309,17 @@ app.get("/category/filter/:name", async (req, res, next) => {
 		// let query = {$or: [...arr]}
 
 		//  let query ={$and:[{ activities:req.params.name},{$or:[{city:"Mumbai"},{city:"Pune"}]}]}
-		const mycity =[];
-		for(let i=0;i<req.query.citiesarr.length;i++){
-			mycity.push({city:req.query.citiesarr[i]});
-		}
-		console.log(mycity)
+		// const mycity =[];
+		// for(let i=0;i<req.query.citiesarr.length;i++){
+		// 	mycity.push({city:req.query.citiesarr[i]});
+		// }
+		// console.log(mycity)
 
-		const classtypesjatin =[]; 
-		for(let i=0;i<req.query.classtypearr.length;i++){
-			classtypesjatin.push({classtype:req.query.classtypearr[i]});
-		}
-		console.log(classtypesjatin)
+		// const classtypesjatin =[]; 
+		// for(let i=0;i<req.query.classtypearr.length;i++){
+		// 	classtypesjatin.push({classtype:req.query.classtypearr[i]});
+		// }
+		// console.log(classtypesjatin)
 		
 		
 		// if(req.query.citiesarr&&req.query.classtypearr)
