@@ -409,4 +409,10 @@ app.get('/classdashboard',verifyaccesstoken,role.checkRole(role.ROLES.Recruiter)
 
 });
 
+app.get('/my/subscribed/classes',verifyaccesstoken,role.checkRole(role.ROLES.Applicant), async (req, res, next)=>{
+
+	const query ={applicantid:req.payload.id};
+
+	const myclasses = await Classapplication.find(query).populate('classid')
+});
 module.exports = app;
