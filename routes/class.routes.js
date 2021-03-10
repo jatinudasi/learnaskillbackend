@@ -409,11 +409,12 @@ app.get('/classdashboard',verifyaccesstoken,role.checkRole(role.ROLES.Recruiter)
 
 });
 
+//for class applicant to know class list 
 app.get('/my/subscribed/classes',verifyaccesstoken,role.checkRole(role.ROLES.Applicant), async (req, res, next)=>{
 
 	const query ={applicantid:req.payload.id};
 
-	const myclasses = await Classapplication.find(query).populate('classid');
+	const myclasses = await Classapplication.find(query).populate('classid').populate('recruiterid');
 
 	res.status(200).send({myclasses: myclasses});
 });
