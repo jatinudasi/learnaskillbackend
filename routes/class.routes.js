@@ -418,4 +418,16 @@ app.get('/my/subscribed/classes',verifyaccesstoken,role.checkRole(role.ROLES.App
 
 	res.status(200).send({myclasses: myclasses});
 });
+
+//trying pagination 
+app.get("/category/pagination/:name/:limit/:page", async (req, res, next) => {
+	try {
+		const {page,limit} = req.params;
+		const getbyactivity = await (await Class.find({ activities: req.params.name })).skip(req.params.page-1*req.).limit(req.params.limit).populate("classowner", ["email", "mobile"]);
+		res.status(200).send({ getbyactivity });
+	} catch (error) {
+		next(error);
+	}
+}); 
+
 module.exports = app;
