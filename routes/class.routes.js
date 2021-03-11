@@ -432,4 +432,117 @@ app.get("/category/pagination/:name/:limit/:page", async (req, res, next) => {
 	}
 }); 
 
+app.get("/category/filter/:name/:limit/:page", async (req, res, next) => {
+	try {
+
+
+		// let type = req.query.classtype;
+		// let city = req.query.city;
+
+		// classtype = type.split(",");
+		// cities = city.split(",");
+		// console.log(classtype);
+		// console.log(cities);
+
+		// let citiesarr = [];
+		// let classtypearr =[];
+
+		// for (let i = 0; i < cities.length; i++) {
+		// 	citiesarr.push({city:cities[i]});
+		// }
+
+		// for (let i = 0; i < classtype.length; i++) {
+		// 	classtypearr.push({classtype:classtype[i]});
+		// }
+
+		// console.log("cities",citiesarr);
+		// console.log("classtype",classtypearr)
+		
+
+		// console.log(arr);
+
+		// let query = {$or: [...arr]}
+
+		//  let query ={$and:[{ activities:req.params.name},{$or:[{city:"Mumbai"},{city:"Pune"}]}]}
+		// const mycity =[];
+		// for(let i=0;i<req.query.citiesarr.length;i++){
+		// 	mycity.push({city:req.query.citiesarr[i]});
+		// }
+		// console.log(mycity)
+
+		// const classtypesjatin =[]; 
+		// for(let i=0;i<req.query.classtypearr.length;i++){
+		// 	classtypesjatin.push({classtype:req.query.classtypearr[i]});
+		// }
+		// console.log(classtypesjatin)
+		
+		
+		// if(req.query.citiesarr&&req.query.classtypearr)
+		// {
+		// console.log("both array given",req.query.citiesarr,req.query.classtypearr)
+		//  query ={$and:[{ activities:req.params.name},{$or:[...req.query.citiesarr]},{$or:[...req.query.classtypearr]}]}
+		// } 
+		// else if(req.query.citiesarr){
+		// 	console.log("cities array given",req.query.citiesarr);
+		// 	query ={$and:[{ activities:req.params.name},{$or:[...req.query.citiesarr]}]}
+		// }else if(req.query.classtypearr){
+		// 	console.log("classtype array given",req.query.classtypearr);
+		// 	query ={$and:[{ activities:req.params.name},{$or:[...req.query.classtypearr]}]}
+		// }
+		// else{
+		// 	res.status(500).send("enter proper details")
+		// }
+
+		let {page,limit} = req.params;
+		page = Number(page);
+		limit = Number(limit);
+
+		if(req.query.citiesarr&&req.query.classtypearr)
+		{
+			const mycity =[];
+		for(let i=0;i<req.query.citiesarr.length;i++){
+			mycity.push({city:req.query.citiesarr[i]});
+		}
+		console.log(mycity);
+		const classtypesjatin =[]; 
+		for(let i=0;i<req.query.classtypearr.length;i++){
+			classtypesjatin.push({classtype:req.query.classtypearr[i]});
+		}
+		console.log(classtypesjatin)
+		console.log("both array given",req.query.citiesarr,req.query.classtypearr)
+		 query ={$and:[{ activities:req.params.name},{$or:[...mycity]},{$or:[...classtypesjatin]}]}
+		} 
+		else if(req.query.citiesarr){
+			const mycity =[];
+		for(let i=0;i<req.query.citiesarr.length;i++){
+			mycity.push({city:req.query.citiesarr[i]});
+		}
+		console.log(mycity);
+			console.log("cities array given",req.query.citiesarr);
+			query ={$and:[{ activities:req.params.name},{$or:[...mycity]}]}
+		}else if(req.query.classtypearr){
+			const classtypesjatin =[]; 
+		for(let i=0;i<req.query.classtypearr.length;i++){
+			classtypesjatin.push({classtype:req.query.classtypearr[i]});
+		}
+		console.log(classtypesjatin)
+			console.log("classtype array given",req.query.classtypearr);
+			query ={$and:[{ activities:req.params.name},{$or:[...classtypesjatin]}]}
+		}
+		else{
+			res.status(500).send("enter proper details")
+		}
+		 
+		//  query ={$and:[{ activities:req.params.name},{$or:[...citiesarr]},{$or:[...classtypearr]}]}
+		console.log("query",query)
+		const filter = await Class.find(query).skip((page-1)*limit).limit(limit);
+		console.log(filter)
+
+		res.status(200).send({ classtype: filter });
+	} catch (error) {
+		next(error);
+	}
+});
+
+
 module.exports = app;
