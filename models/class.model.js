@@ -75,6 +75,15 @@ const classSchema = Schema({
 });
 
 
-// classSchema.pre("")
+//  classSchema.pre('remove',async function(next){
+//    try {
+//      console.log("delete function triggered great");
+
+//      console.log("value of this is :",this)
+     
+//    } catch (error) {
+//      next(error);
+//    }
+//  })
 
 module.exports = model("Class", classSchema);

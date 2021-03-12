@@ -207,9 +207,11 @@ app.post("/:classid/image", verifyaccesstoken, role.checkRole(role.ROLES.Recruit
 });
 
 //deleting a class by id
-app.delete("/:id", verifyaccesstoken, async (req, res, next) => {
+app.delete("/:id", verifyaccesstoken,role.checkRole(role.ROLES.Recruiter), async (req, res, next) => {
 	try {
+		const classapplication = await ClassApplication.deleteMany({classid:req.params.id})
 		const del = await Class.findByIdAndDelete(req.params.id);
+		console.log("class applications delted due to class deletion",classapplication);
 		res.send(del);
 	} catch (error) {
 		next(error);
