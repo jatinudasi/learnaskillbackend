@@ -55,12 +55,10 @@ app.post(
           recruiterid: clas.classowner,
         });
         await newapplication.save();
-        res
-          .status(201)
-          .send({
-            message: "inside if application created",
-            subscribed: newapplication.status,
-          });
+        res.status(201).send({
+          message: "inside if application created",
+          subscribed: newapplication.status,
+        });
       } else {
         console.log("inside else");
         console.log(find);
@@ -72,12 +70,10 @@ app.post(
           applicantid: req.payload.id,
         });
         //  const cancellapplication = await ClassApplication.findOneAndDelete(query);
-        res
-          .status(201)
-          .send({
-            message: "inside else application destroyed",
-            status: "Apply",
-          });
+        res.status(201).send({
+          message: "inside else application destroyed",
+          status: "Apply",
+        });
       }
     } catch (error) {
       next(error);
@@ -577,11 +573,12 @@ app.get("/category/pagination/:name/:limit/:page", async (req, res, next) => {
     let { page, limit, name } = req.params;
     page = Number(page);
     limit = Number(limit);
+    const total = await (await Class.find({ activities: name })).count();
     const getbyactivity = await Class.find({ activities: name })
       .skip((page - 1) * limit)
       .limit(limit)
       .populate("classowner", ["email", "mobile"]);
-    res.status(200).send({ getbyactivity });
+    res.status(200).send({ getbyactivity, total });
   } catch (error) {
     next(error);
   }
@@ -695,18 +692,19 @@ app.get("/category/filter/:name/:limit/:page", async (req, res, next) => {
 
     //  query ={$and:[{ activities:req.params.name},{$or:[...citiesarr]},{$or:[...classtypearr]}]}
     console.log("query", query);
+    const total = await Class.find(query).count();
     const filter = await Class.find(query)
       .skip((page - 1) * limit)
       .limit(limit);
     console.log(filter);
 
-    res.status(200).send({ classtype: filter });
+    res.status(200).send({ classtype: filter, total: total });
   } catch (error) {
     next(error);
   }
 });
 
-app.get('/home/homepage', async (req, res, next) => {
+app.get("/home/homepage", async (req, res, next) => {
   try {
     const Hospital = await Class.find({ activities: "Hospital" }).count();
     const Technical = await Class.find({ activities: "Technical" }).count();
@@ -716,7 +714,15 @@ app.get('/home/homepage', async (req, res, next) => {
     const Performance = await Class.find({ activities: "Performance" }).count();
     const Programming = await Class.find({ activities: "Hospital" }).count();
 
-	res.status(200).send({Hospital,Technical,Sport,Cenimatics,Cooking,Performance,Programming})
+    res.status(200).send({
+      Hospital,
+      Technical,
+      Sport,
+      Cenimatics,
+      Cooking,
+      Performance,
+      Programming,
+    });
   } catch (error) {
     next(error);
   }
