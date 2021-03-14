@@ -573,12 +573,12 @@ app.get("/category/pagination/:name/:limit/:page", async (req, res, next) => {
     let { page, limit, name } = req.params;
     page = Number(page);
     limit = Number(limit);
-    const total = await (await Class.find({ activities: name })).count();
+    const total = await Class.find({ activities: name }).count();
     const getbyactivity = await Class.find({ activities: name })
       .skip((page - 1) * limit)
       .limit(limit)
       .populate("classowner", ["email", "mobile"]);
-    res.status(200).send({ getbyactivity, total });
+    res.status(200).send({ getbyactivity, total: total });
   } catch (error) {
     next(error);
   }
