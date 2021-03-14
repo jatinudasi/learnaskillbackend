@@ -645,7 +645,7 @@ app.get("/category/filter/:name/:limit/:page", async (req, res, next) => {
     page = Number(page);
     limit = Number(limit);
 
-    if (req.query.citiesarr && req.query.classtypearr) {
+    if (req.query.citiesarr.length && req.query.classtypearr.length) {
       const mycity = [];
       for (let i = 0; i < req.query.citiesarr.length; i++) {
         mycity.push({ city: req.query.citiesarr[i] });
@@ -668,7 +668,7 @@ app.get("/category/filter/:name/:limit/:page", async (req, res, next) => {
           { $or: [...classtypesjatin] },
         ],
       };
-    } else if (req.query.citiesarr) {
+    } else if (req.query.citiesarr.length) {
       const mycity = [];
       for (let i = 0; i < req.query.citiesarr.length; i++) {
         mycity.push({ city: req.query.citiesarr[i] });
@@ -676,7 +676,7 @@ app.get("/category/filter/:name/:limit/:page", async (req, res, next) => {
       console.log(mycity);
       console.log("cities array given", req.query.citiesarr);
       query = { $and: [{ activities: req.params.name }, { $or: [...mycity] }] };
-    } else if (req.query.classtypearr) {
+    } else if (req.query.classtypearr.length) {
       const classtypesjatin = [];
       for (let i = 0; i < req.query.classtypearr.length; i++) {
         classtypesjatin.push({ classtype: req.query.classtypearr[i] });
