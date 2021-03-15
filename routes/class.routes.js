@@ -526,15 +526,31 @@ app.get("/city/:city", async (req, res, next) => {
 });
 
 //for class applicant to know class list
+// app.get(
+//   "/my/subscribed/classes",
+//   verifyaccesstoken,
+//   role.checkRole(role.ROLES.Applicant),
+//   async (req, res, next) => {
+//     try {
+//       const query = { applicantid: req.payload.id };
+
+//       const myclasses = await ClassApplication.find(query)
+//         .populate("classid")
+//         .populate("recruiterid");
+
+//       res.status(200).send({ myclasses: myclasses });
+//     } catch (error) {
+//       next(error);
+//     }
+//   }
+// );
 app.get(
-  "/my/subscribed/classes",
+  "/my/subscribed/classes/:status",
   verifyaccesstoken,
   role.checkRole(role.ROLES.Applicant),
   async (req, res, next) => {
     try {
-      const query = { applicantid: req.payload.id };
-
-      const myclasses = await ClassApplication.find(query)
+      const myclasses = await ClassApplication.find({applicantid: req.payload.id,status: req.params.status});
         .populate("classid")
         .populate("recruiterid");
 
@@ -545,12 +561,12 @@ app.get(
   }
 );
 app.get(
-  "/my/subscribed/classes/:status",
+  "/my/subscribed/number/classes",
   verifyaccesstoken,
   role.checkRole(role.ROLES.Applicant),
   async (req, res, next) => {
     try {
-      const query = { applicantid: req.payload.id, status: req.params.status };
+      const query = { applicantid: req.payload.id, status: "Applied" };
 
       const myclasses = await ClassApplication.find(query)
         .populate("classid")
