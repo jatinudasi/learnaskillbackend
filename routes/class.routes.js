@@ -569,13 +569,25 @@ app.get(
   role.checkRole(role.ROLES.Applicant),
   async (req, res, next) => {
     try {
-      const query = { applicantid: req.payload.id, status: "Applied" };
+      // const query = { applicantid: req.payload.id, status: "Applied" };
 
-      const myclasses = await ClassApplication.find(query)
-        .populate("classid")
-        .populate("recruiterid");
+      // const myclasses = await ClassApplication.find(query)
+      //   .populate("classid")
+      //   .populate("recruiterid");
+      const Applied = await ClassApplication.find({
+        applicantid: req.payload.id,
+        status: "Applied",
+      }).count();
+      const Confirmed = await ClassApplication.find({
+        applicantid: req.payload.id,
+        status: "Confirmed",
+      }).count();
+      const Rejected = await ClassApplication.find({
+        applicantid: req.payload.id,
+        status: "Rejected",
+      }).count();
 
-      res.status(200).send({ myclasses: myclasses });
+      res.status(200).send({ Applied, Confirmed, Rejected });
     } catch (error) {
       next(error);
     }
