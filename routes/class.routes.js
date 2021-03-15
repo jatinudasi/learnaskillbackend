@@ -525,34 +525,6 @@ app.get("/city/:city", async (req, res, next) => {
   }
 });
 
-app.get(
-  "/classdashboard",
-  verifyaccesstoken,
-  role.checkRole(role.ROLES.Recruiter),
-  async (req, res, next) => {
-    try {
-      console.log(req.payload);
-      const pending = await ClassApplication.find({
-        recruiterid: req.payload.id,
-        status: "Applied",
-      }).count();
-      const accepted = await ClassApplication.find({
-        recruiterid: req.payload.id,
-        status: "Confirmed",
-      }).count();
-      const rejected = await ClassApplication.find({
-        recruiterid: req.paypayload.id,
-        status: "Rejected",
-      }).count();
-      res
-        .status(200)
-        .send({ pending: pending, accepted: accepted, rejected: rejected });
-    } catch (error) {
-      next(error);
-    }
-  }
-);
-
 //for class applicant to know class list
 app.get(
   "/my/subscribed/classes",
@@ -729,5 +701,34 @@ app.get("/home/homepage", async (req, res, next) => {
     next(error);
   }
 });
+app.get(
+  "/board/classdashboard",
+  verifyaccesstoken,
+  role.checkRole(role.ROLES.Recruiter),
+  async (req, res, next) => {
+    console.log("classdashboard inside");
+
+    try {
+      console.log("inside class dash", req.payload);
+      const pending = await ClassApplication.find({
+        recruiterid: req.payload.id,
+        status: "Applied",
+      }).count();
+      const accepted = await ClassApplication.find({
+        recruiterid: req.payload.id,
+        status: "Confirmed",
+      }).count();
+      const rejected = await ClassApplication.find({
+        recruiterid: req.payload.id,
+        status: "Rejected",
+      }).count();
+      res
+        .status(200)
+        .send({ pending: pending, accepted: accepted, rejected: rejected });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 module.exports = app;
