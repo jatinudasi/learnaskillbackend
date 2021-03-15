@@ -513,7 +513,7 @@ app.get("/category/filter/:name", async (req, res, next) => {
   }
 });
 //for city purporse
-app.get("/:city", async (req, res, next) => {
+app.get("/city/:city", async (req, res, next) => {
   try {
     console.log("inside city");
     const bycity = await Class.find({
