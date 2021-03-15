@@ -137,8 +137,8 @@ exports.rejected = async (req, res, next) => {
 
 exports.image = async (req, res, next) => {
 	try {
-		const job = await Job.findById(req.params.jonId);
-		if (!job) throw new Error("enter valid class id");
+		const job = await Job.findById(req.params.jobId);
+		if (!job) throw new Error("enter valid job id");
 		if (!req.file) throw new Error("enter image");
 
 		const path = req.file.path;
@@ -155,7 +155,7 @@ exports.image = async (req, res, next) => {
 
 exports.myfile = async (req, res, next) => {
 	try {
-		const job = await Job.findById(req.params.jonId);
+		const job = await Job.findById(req.params.jobId);
 		if (!job) throw new Error("enter valid class id");
 		if (!req.file) throw new Error("Upolad file");
 
