@@ -739,7 +739,9 @@ app.get("/home/homepage", async (req, res, next) => {
     const Cenimatics = await Class.find({ activities: "Cenimatics" }).count();
     const Cooking = await Class.find({ activities: "Cooking" }).count();
     const Performance = await Class.find({ activities: "Performance" }).count();
-    const Programming = await Class.find({ activities: "Hospital" }).count();
+    const Programming = await Class.find({
+      activities: " Programming",
+    }).count();
 
     res.status(200).send({
       Hospital,
