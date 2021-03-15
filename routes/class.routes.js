@@ -550,7 +550,10 @@ app.get(
   role.checkRole(role.ROLES.Applicant),
   async (req, res, next) => {
     try {
-      const myclasses = await ClassApplication.find({applicantid: req.payload.id,status: req.params.status});
+      const myclasses = await ClassApplication.find({
+        applicantid: req.payload.id,
+        status: req.params.status,
+      })
         .populate("classid")
         .populate("recruiterid");
 
