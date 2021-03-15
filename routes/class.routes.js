@@ -544,6 +544,24 @@ app.get(
     }
   }
 );
+app.get(
+  "/my/subscribed/classes/:status",
+  verifyaccesstoken,
+  role.checkRole(role.ROLES.Applicant),
+  async (req, res, next) => {
+    try {
+      const query = { applicantid: req.payload.id, status: req.params.status };
+
+      const myclasses = await ClassApplication.find(query)
+        .populate("classid")
+        .populate("recruiterid");
+
+      res.status(200).send({ myclasses: myclasses });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 //trying pagination
 app.get("/category/pagination/:name/:limit/:page", async (req, res, next) => {
