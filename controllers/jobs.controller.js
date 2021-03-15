@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Job = require("../models/job.model");
 const Application = require("../models/application.model");
+const { configcloud, uploadtocloud } = require("./../helpers/cloudinary");
 
 exports.post = async (req, res, next) => {
 	try {
@@ -133,3 +134,21 @@ exports.rejected = async (req, res, next) => {
 		next(error);
 	}
 };
+
+exports.image = async (req, res, next) => {
+	try {
+		const job = await Job.findById(req.params.jonId);
+		if (!job) throw new Error("enter valid class id");
+		if (!req.file) throw new Error("enter image");
+
+		const path = req.file.path;
+		const resulturl = await uploadtocloud(path);
+		//  req.body.image = resulturl.url;
+		clas.image = resulturl.url;
+
+		const job1 = await clas.save();
+		res.status(201).send({ class: job1 });
+	} catch (error) {
+		next(error);
+	}
+}
