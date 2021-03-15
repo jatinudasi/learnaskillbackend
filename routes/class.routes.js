@@ -531,6 +531,7 @@ app.get(
   role.checkRole(role.ROLES.Recruiter),
   async (req, res, next) => {
     try {
+      console.log(req.payload);
       const pending = await ClassApplication.find({
         recruiterid: req.payload.id,
         status: "Applied",
