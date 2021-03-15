@@ -526,18 +526,71 @@ app.get("/city/:city", async (req, res, next) => {
 });
 
 //for class applicant to know class list
+// app.get(
+//   "/my/subscribed/classes",
+//   verifyaccesstoken,
+//   role.checkRole(role.ROLES.Applicant),
+//   async (req, res, next) => {
+//     try {
+//       const query = { applicantid: req.payload.id };
+
+//       const myclasses = await ClassApplication.find(query)
+//         .populate("classid")
+//         .populate("recruiterid");
+
+//       res.status(200).send({ myclasses: myclasses });
+//     } catch (error) {
+//       next(error);
+//     }
+//   }
+// );
 app.get(
-  "/my/subscribed/classes",
+  "/my/subscribed/classes/:status",
   verifyaccesstoken,
   role.checkRole(role.ROLES.Applicant),
   async (req, res, next) => {
-    const query = { applicantid: req.payload.id };
+    try {
+      const myclasses = await ClassApplication.find({
+        applicantid: req.payload.id,
+        status: req.params.status,
+      })
+        .populate("classid")
+        .populate("recruiterid");
 
-    const myclasses = await Classapplication.find(query)
-      .populate("classid")
-      .populate("recruiterid");
+      res.status(200).send({ myclasses: myclasses });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+app.get(
+  "/my/subscribed/number/classes",
+  verifyaccesstoken,
+  role.checkRole(role.ROLES.Applicant),
+  async (req, res, next) => {
+    try {
+      // const query = { applicantid: req.payload.id, status: "Applied" };
 
-    res.status(200).send({ myclasses: myclasses });
+      // const myclasses = await ClassApplication.find(query)
+      //   .populate("classid")
+      //   .populate("recruiterid");
+      const Applied = await ClassApplication.find({
+        applicantid: req.payload.id,
+        status: "Applied",
+      }).count();
+      const Confirmed = await ClassApplication.find({
+        applicantid: req.payload.id,
+        status: "Confirmed",
+      }).count();
+      const Rejected = await ClassApplication.find({
+        applicantid: req.payload.id,
+        status: "Rejected",
+      }).count();
+
+      res.status(200).send({ Applied, Confirmed, Rejected });
+    } catch (error) {
+      next(error);
+    }
   }
 );
 
