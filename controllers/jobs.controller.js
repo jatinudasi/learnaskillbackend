@@ -144,10 +144,10 @@ exports.image = async (req, res, next) => {
 		const path = req.file.path;
 		const resulturl = await uploadtocloud(path);
 		//  req.body.image = resulturl.url;
-		clas.image = resulturl.url;
+		job.image = resulturl.url;
 
 		const job1 = await clas.save();
-		res.status(201).send({ class: job1 });
+		res.status(201).send({ job: job1 });
 	} catch (error) {
 		next(error);
 	}
