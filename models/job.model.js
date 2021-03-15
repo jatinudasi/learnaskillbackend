@@ -33,6 +33,9 @@ const jobSchema = new Schema(
       required: true,
       enum: ["Fulltime", "Parttime", "Remote"],
     },
+	resume: {
+		type: String
+	  },
     address: {
       type: String,
       required: true,

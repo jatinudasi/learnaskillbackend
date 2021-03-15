@@ -4,13 +4,14 @@ const { verifyaccesstoken } = require("./../helpers/jwt.helpers");
 const jobsController = require("../controllers/jobs.controller");
 const role = require("./../helpers/role");
 const applicationController = require("../controllers/application.controller");
-const { upload } = require("./../helpers/multer");
-const { configcloud, uploadtocloud } = require("./../helpers/cloudinary");
+const { upload, docupload } = require("./../helpers/multer");
+const { configcloud } = require("./../helpers/cloudinary");
 
 router.get("/applied", verifyaccesstoken, applicationController.fetchApplied);
 router.get("/", verifyaccesstoken, jobsController.get);
 router.post("/", verifyaccesstoken, jobsController.post);
 router.post("/:jobId/image", verifyaccesstoken, role.checkRole(role.ROLES.Recruiter), upload.single("image"), configcloud, jobsController.image);
+router.post("/myfile/:jobId", verifyaccesstoken, role.checkRole(role.ROLES.Recruiter), docupload.single("myFile"), configcloud, jobsController.myfile);
 router.get("/:city", verifyaccesstoken, jobsController.getbyCity);
 router.get("/:jobId", verifyaccesstoken, jobsController.getOne);
 router.put("/:jobId", verifyaccesstoken, jobsController.putOne);

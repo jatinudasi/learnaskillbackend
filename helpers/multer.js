@@ -13,8 +13,20 @@ var storage = multer.diskStorage({
 		cb(null, `${Date.now()}.jpg`);
 	}
 });
+
+var docStorage = multer.diskStorage({
+	destination: function (req, file, cb) {
+		console.log("+++++++++++++++++++++++++++++",file)
+	},
+	filename: function (req, file, cb) {
+		cb(null, `${Date.now()}`);
+	}
+});
+var docupload = multer({ storage: docStorage });
 var upload = multer({ storage: storage });
-module.exports = { upload };
+
+
+module.exports = { upload, docupload };
 
 // const multer = require('multer')
 // const  Datauri =require('datauri');

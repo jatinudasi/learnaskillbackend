@@ -28,7 +28,24 @@ const uploadtocloud = (file) => {
   });
 };
 
-module.exports = { configcloud, uploadtocloud };
+const doctocloud = (file) => {
+  return new Promise((resolve, reject) => {
+    cloudinary.uploader.upload(file, function (error, doc) {
+      console.log("file",file)
+      console.log(error);
+      console.log(doc);
+      const fs = require("fs");
+      fs.unlinkSync(file);
+      console.log("Resume",doc);
+      if (error) {
+        console.log("there is error ");
+        reject(new Error("there is error in cloudinary"));
+      }
+      resolve({ url: doc.url, id: doc.public_id });
+    });
+  });
+};
+module.exports = { configcloud, uploadtocloud, doctocloud };
 
 // const { config, uploader } = require("cloudinary");
 

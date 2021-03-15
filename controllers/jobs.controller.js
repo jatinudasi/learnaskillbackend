@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Job = require("../models/job.model");
 const Application = require("../models/application.model");
-const { configcloud, uploadtocloud } = require("./../helpers/cloudinary");
+const { doctocloud, uploadtocloud } = require("./../helpers/cloudinary");
 
 exports.post = async (req, res, next) => {
 	try {
@@ -146,7 +146,25 @@ exports.image = async (req, res, next) => {
 		//  req.body.image = resulturl.url;
 		job.image = resulturl.url;
 
-		const job1 = await clas.save();
+		const job1 = await job.save();
+		res.status(201).send({ job: job1 });
+	} catch (error) {
+		next(error);
+	}
+}
+
+exports.myfile = async (req, res, next) => {
+	try {
+		const job = await Job.findById(req.params.jonId);
+		if (!job) throw new Error("enter valid class id");
+		if (!req.file) throw new Error("Upolad file");
+
+		const path = req.file.path;
+		const resulturl = await doctocloud(path);
+		//  req.body.image = resulturl.url;
+		job.resume = resulturl.url;
+
+		const job1 = await job.save();
 		res.status(201).send({ job: job1 });
 	} catch (error) {
 		next(error);
