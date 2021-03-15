@@ -512,12 +512,12 @@ app.get("/category/filter/:name", async (req, res, next) => {
     next(error);
   }
 });
-
+//for city purporse
 app.get("/:city", async (req, res, next) => {
   try {
     const bycity = await Class.find({
       city: req.params.city,
-    }).populate("classowner", ["email", "mobile"]);
+    });
     res.status(200).send({ city: bycity });
   } catch (error) {
     next(error);
