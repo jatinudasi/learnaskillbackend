@@ -740,7 +740,7 @@ app.get("/home/homepage", async (req, res, next) => {
     const Cooking = await Class.find({ activities: "Cooking" }).count();
     const Performance = await Class.find({ activities: "Performance" }).count();
     const Programming = await Class.find({
-      activities: " Programming",
+      activities: "Programming",
     }).count();
 
     res.status(200).send({
