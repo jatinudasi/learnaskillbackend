@@ -531,13 +531,17 @@ app.get(
   verifyaccesstoken,
   role.checkRole(role.ROLES.Applicant),
   async (req, res, next) => {
-    const query = { applicantid: req.payload.id };
+    try {
+      const query = { applicantid: req.payload.id };
 
-    const myclasses = await Classapplication.find(query)
-      .populate("classid")
-      .populate("recruiterid");
+      const myclasses = await ClassApplication.find(query)
+        .populate("classid")
+        .populate("recruiterid");
 
-    res.status(200).send({ myclasses: myclasses });
+      res.status(200).send({ myclasses: myclasses });
+    } catch (error) {
+      next(error);
+    }
   }
 );
 
