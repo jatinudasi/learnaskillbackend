@@ -151,7 +151,7 @@ exports.image = async (req, res, next) => {
 	} catch (error) {
 		next(error);
 	}
-}
+};
 
 exports.myfile = async (req, res, next) => {
 	try {
@@ -169,4 +169,28 @@ exports.myfile = async (req, res, next) => {
 	} catch (error) {
 		next(error);
 	}
-}
+};
+
+exports.jobHomepage = async (req, res, next) => {
+	try {
+		const Hospital = await Job.find({ activities: "Hospital" }).count();
+		const Technical = await Job.find({ activities: "Technical" }).count();
+		const Sport = await Job.find({ activities: "Sport" }).count();
+		const Cenimatics = await Job.find({ activities: "Cenimatics" }).count();
+		const Cooking = await Job.find({ activities: "Cooking" }).count();
+		const Performance = await Job.find({ activities: "Performance" }).count();
+		const Programming = await Job.find({ activities: "Hospital" }).count();
+
+		res.status(200).send({
+			Hospital,
+			Technical,
+			Sport,
+			Cenimatics,
+			Cooking,
+			Performance,
+			Programming,
+		});
+	} catch (error) {
+		next(error);
+	}
+};

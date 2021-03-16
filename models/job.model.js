@@ -36,10 +36,37 @@ const jobSchema = new Schema(
 		resume: {
 			type: String,
 		},
-    image:{
+		image: {
 			type: String,
-    },
-<<<<<<< HEAD
+		},
+		title: {
+			type: String,
+			required: true,
+		},
+		company: {
+			type: String,
+			required: true,
+		},
+		city: {
+			type: String,
+			required: true,
+		},
+		description: {
+			type: String,
+			required: true,
+		},
+		industry: {
+			type: String,
+			required: true,
+		},
+		classtype: {
+			type: String,
+			required: true,
+			enum: ["Fulltime", "Parttime", "Remote"],
+		},
+		resume: {
+			type: String,
+		},
 		address: {
 			type: String,
 			required: true,
@@ -71,75 +98,6 @@ const jobSchema = new Schema(
 	{
 		timestamps: true,
 	}
-=======
-    title: {
-      type: String,
-      required: true,
-    },
-    company: {
-      type: String,
-      required: true,
-    },
-    city: {
-      type: String,
-      required: true,
-    },
-    description: {
-      type: String,
-      required: true,
-    },
-    industry: {
-      type: String,
-      required: true,
-    },
-    classtype: {
-      type: String,
-      required: true,
-      enum: ["Fulltime", "Parttime", "Remote"],
-    },
-    resume: {
-      type: String,
-    },
-    address: {
-      type: String,
-      required: true,
-    },
-    function: {
-      type: String,
-      required: true,
-    },
-    skills: {
-      type: [String],
-      required: true,
-    },
-    activities: {
-      type: String,
-      required: true,
-      enum: [
-        "Hospital",
-        "Technical",
-        "Sport",
-        "Cenimatics",
-        "Cooking",
-        "Performance",
-        "Programming",
-      ],
-    },
-    vacancy: {
-      type: Number,
-      min: [1, "enter minimum vacancy 1"],
-      max: [10, "enter max vacancy of 10"],
-    },
-    salary: {
-      type: Number,
-      required: true,
-      trim: true,
-    },
-  },
-  {
-    timestamps: true,
-  }
->>>>>>> c34cb57082a97a3133a98d06051ebaaa4944551f
 );
 
 module.exports = mongoose.model("Job", jobSchema);
