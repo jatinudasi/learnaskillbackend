@@ -4,7 +4,7 @@ const { verifyaccesstoken } = require("./../helpers/jwt.helpers");
 const jobsController = require("../controllers/jobs.controller");
 const role = require("./../helpers/role");
 const applicationController = require("../controllers/application.controller");
-const { upload, docupload } = require("./../helpers/multer");
+const { upload } = require("./../helpers/multer");
 const { configcloud } = require("./../helpers/cloudinary");
 const Job = require("./../models/job.model");
 
@@ -16,7 +16,6 @@ router.post(
   configcloud,
   jobsController.image
 );
-
 router.get("/:jobId", verifyaccesstoken, jobsController.getOne);
 router.get("/", verifyaccesstoken, jobsController.get);
 router.post("/", verifyaccesstoken, jobsController.post);
@@ -25,7 +24,7 @@ router.post(
   "/myfile/:jobId",
   verifyaccesstoken,
   role.checkRole(role.ROLES.Recruiter),
-  docupload.single("myFile"),
+  upload.single("myFile"),
   configcloud,
   jobsController.myfile
 );
@@ -52,18 +51,21 @@ router.post(
   role.checkRole(role.ROLES.Recruiter),
   jobsController.rejected
 );
-router.get("/filter/job/:activities", verifyaccesstoken, (req, res, next) => {
-  try {
-
-      const activitie = await Job.find({activities:req.params.activities});
-      res.status(200).send({activitie})
-  } catch (error) {
-    next(error);
+router.get(
+  "/filter/job/:activities",
+  verifyaccesstoken,
+  async (req, res, next) => {
+    try {
+      const activitie = await Job.find({ activities: req.params.activities });
+      res.status(200).send({ activitie });
+    } catch (error) {
+      next(error);
+    }
   }
-});
-/* router.get('/:jobId/details', verifyaccesstoken, applicationController.getApplicationDetails)
-//router.post('/:jobId/unsave', verifyaccesstoken, applicationController.unsave)
+);
+// /* router.get('/:jobId/details', verifyaccesstoken, applicationController.getApplicationDetails)
+// //router.post('/:jobId/unsave', verifyaccesstoken, applicationController.unsave)
 
- */
+//  */
 
 module.exports = router;
