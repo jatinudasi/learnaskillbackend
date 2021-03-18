@@ -898,8 +898,5 @@ app.get("/city/filter/:city", async (req, res, next) => {
     next(error);
   }
 });
-//is this working
-// is this really working
-//i am asking again is this really working
 
 module.exports = app;
