@@ -8,17 +8,17 @@ const ClassApplication = require("./../models/classapplication.model");
 const role = require("./../helpers/role");
 //all the classes
 
-// app.get("/all", verifyaccesstoken, async (req, res, next) => {
-//   try {
-//     const allclasses = await Class.find().populate("classowner", [
-//       "email",
-//       "mobile",
-//     ]);
-//     res.status(200).send({ classes: allclasses });
-//   } catch (error) {
-//     next(error);
-//   }
-// });
+app.get("/all", verifyaccesstoken, async (req, res, next) => {
+  try {
+    const allclasses = await Class.find().populate("classowner", [
+      "email",
+      "mobile",
+    ]);
+    res.status(200).send({ classes: allclasses });
+  } catch (error) {
+    next(error);
+  }
+});
 //apply route
 app.post(
   "/apply/:classid",
