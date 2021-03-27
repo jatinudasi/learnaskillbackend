@@ -142,16 +142,16 @@ app.post(
 // );
 
 //get all programming class
-// app.get("/category/:name", async (req, res, next) => {
-//   try {
-//     const getbyactivity = await Class.find({
-//       activities: req.params.name,
-//     }).populate("classowner", ["email", "mobile"]);
-//     res.status(200).send({ getbyactivity });
-//   } catch (error) {
-//     next(error);
-//   }
-// });
+app.get("/category/:name", async (req, res, next) => {
+  try {
+    const getbyactivity = await Class.find({
+      activities: req.params.name,
+    }).populate("classowner", ["email", "mobile"]);
+    res.status(200).send({ getbyactivity });
+  } catch (error) {
+    next(error);
+  }
+});
 //getting a specific class
 app.get("/:id", verifyaccesstoken, async (req, res, next) => {
   try {
