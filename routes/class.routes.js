@@ -602,8 +602,8 @@ app.get("/category/pagination/:name/:limit/:page", async (req, res, next) => {
     limit = Number(limit);
     const total = await Class.find({ activities: name }).count();
     const getbyactivity = await Class.find({ activities: name })
-      .skip((page - 1) * limit)
-      .limit(limit)
+      // .skip((page - 1) * limit)
+      // .limit(limit)
       .populate("classowner", ["email", "mobile"]);
     res.status(200).send({ getbyactivity, total: total });
   } catch (error) {
